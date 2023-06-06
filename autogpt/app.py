@@ -10,7 +10,10 @@ from autogpt.processing.text import summarize_text
 from autogpt.prompts.generator import PromptGenerator
 from autogpt.speech import say_text
 from autogpt.url_utils.validators import validate_url
+class InvalidIntegerError(Exception):
+    """Exception raised when the value is not a valid integer."""
 
+    pass
 
 def is_valid_int(value: str) -> bool:
     """Check if the value is a valid integer
@@ -25,8 +28,9 @@ def is_valid_int(value: str) -> bool:
         int(value)
         return True
     except ValueError:
+        raise InvalidIntegerError("Invalid integer value") from None
+    except TypeError:
         return False
-
 
 def get_command(response_json: Dict):
     """Parse the response and return the command name and arguments
