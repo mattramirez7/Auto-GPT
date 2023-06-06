@@ -5,7 +5,10 @@ from autogpt.config import Config
 from autogpt.llm.base import ChatSequence
 from autogpt.llm.chat import Message, create_chat_completion
 from autogpt.singleton import Singleton
+class AgentNotFoundError(Exception):
+    """Exception raised when an agent is not found."""
 
+    pass
 
 class AgentManager(metaclass=Singleton):
     """Agent manager for managing GPT agents"""
@@ -134,8 +137,15 @@ class AgentManager(metaclass=Singleton):
             True if successful, False otherwise
         """
 
+        """Delete an agent from the agent manager.
+
+        Args:
+            key: The key of the agent to delete.
+
+        Raises:
+            AgentNotFoundError: If the agent with the given key is not found.
+        """
         try:
             del self.agents[int(key)]
-            return True
         except KeyError:
-            return False
+            raise AgentNotFoundError(f"Agent with key '{key}' not found.")
